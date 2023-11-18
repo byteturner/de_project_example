@@ -13,4 +13,5 @@ module "airflow_ec2" {
   source     = "../../modules/airflow_ec2"
   depends_on = [module.postgres_rds]
   vpc_id     = data.aws_vpc.default.id
+  key_pair_name = var.key_pair_name
 }
