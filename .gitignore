@@ -195,3 +195,8 @@ override.tf.json
 terraform.rc
 *.hcl
 
+# Airflow
+logs/
+pg_data/
+plugins/
+secrets/
