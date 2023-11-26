@@ -3,6 +3,8 @@ import requests
 import os
 from airflow import DAG
 from airflow.operators.python import PythonOperator
+from airflow.operators.dummy import DummyOperator
+from airflow.providers.snowflake.operators.snowflake import SnowflakeOperator
 from airflow.providers.amazon.aws.transfers.local_to_s3 import LocalFilesystemToS3Operator
 
 from constants import (
@@ -25,10 +27,10 @@ def download_data(execution_date, web_url, service_name, file_format, local_path
             file.write(response.content)
 
         print(f"File {webfilepath} was successfully downloaded.")
-        return f"{localfilepath}"
+        return f"{service}_taxi_data_to_s3"
     else:
         print(f"Error to download file {webfilepath}. Error: ", response.status_code)
-        return None
+        return f'skip_loading_{service}'
 
 
 def delete_data(execution_date, local_path, service_name, file_format):
@@ -59,7 +61,7 @@ with DAG(
 ) as dag:
     for service in SERVICES:
         download_file = PythonOperator(
-            task_id=f'download_{service}_file',
+            task_id=f"download_{service}_file",
             python_callable=download_data,
             op_kwargs={
                 'web_url': WEB_URL,
@@ -69,8 +71,9 @@ with DAG(
             },
             provide_context=True
         )
+        skip_loading = DummyOperator(task_id=f'skip_loading_{service}')
         load_to_s3 = LocalFilesystemToS3Operator(
-            task_id=f"{service}_taxi_data_to_raw_datalake",
+            task_id=f"{service}_taxi_data_to_s3",
             filename=f"{LOCAL_PATH}{service}_tripdata_"
                      f"{{{{ macros.ds_format(ds, '%Y-%m-%d', '%Y-%m') }}}}.{FILE_FORMAT}",
             dest_bucket=BUCKET_NAME,
@@ -81,8 +84,17 @@ with DAG(
             aws_conn_id="aws",
             encrypt=True,
         )
+        copy_into_snowflake = SnowflakeOperator(
+            task_id=f'copy_{service}_parquet_to_snowflake',
+            sql=f"""
+                COPY INTO taxi_db.raw_data.{service}
+                FROM @manage_db.external_stages.taxi_path/{service}/{{{{ macros.ds_format(ds, '%Y-%m-%d', '%Y-%m') }}}}/{service}_{{{{ macros.ds_format(ds, '%Y-%m-%d', '%Y-%m') }}}}_monthly_data.{FILE_FORMAT}
+                MATCH_BY_COLUMN_NAME=CASE_INSENSITIVE;
+                """,
+            snowflake_conn_id='snowflake'
+        )
         delete_file = PythonOperator(
-            task_id=f'delete_{service}_file',
+            task_id=f"delete_{service}_file",
             python_callable=delete_data,
             op_kwargs={
                 'service_name': service,
@@ -91,4 +103,5 @@ with DAG(
             },
             provide_context=True
         )
-        download_file >> load_to_s3 >> delete_file
+        #download_file >> skip_loading
+        download_file >> load_to_s3 >> delete_file >> copy_into_snowflake
