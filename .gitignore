@@ -200,3 +200,4 @@ logs/
 pg_data/
 plugins/
 config/
+dbt_packages/

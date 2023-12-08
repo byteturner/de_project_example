@@ -15,7 +15,9 @@ from constants import (
     LOCAL_PATH
 )
 
-
+def read_sql_file(file_path):
+    with open(file_path, 'r') as file:
+        return file.read()
 def download_data(execution_date, web_url, service_name, file_format, local_path):
     filedate = execution_date.strftime("_tripdata_%Y-%m.")
     webfilepath = f"{web_url}{service_name}{filedate}{file_format}"
@@ -58,6 +60,7 @@ with DAG(
         catchup=True,
         max_active_runs=1,
         is_paused_upon_creation=True,
+        fail_stop=True
 ) as dag:
     for service in SERVICES:
         download_file = PythonOperator(
@@ -72,6 +75,7 @@ with DAG(
             provide_context=True
         )
         skip_loading = DummyOperator(task_id=f'skip_loading_{service}')
+
         load_to_s3 = LocalFilesystemToS3Operator(
             task_id=f"{service}_taxi_data_to_s3",
             filename=f"{LOCAL_PATH}{service}_tripdata_"
@@ -84,13 +88,11 @@ with DAG(
             aws_conn_id="aws",
             encrypt=True,
         )
+
         copy_into_snowflake = SnowflakeOperator(
             task_id=f'copy_{service}_parquet_to_snowflake',
-            sql=f"""
-                COPY INTO taxi_db.raw_data.{service}
-                FROM @manage_db.external_stages.taxi_path/{service}/{{{{ macros.ds_format(ds, '%Y-%m-%d', '%Y-%m') }}}}/{service}_{{{{ macros.ds_format(ds, '%Y-%m-%d', '%Y-%m') }}}}_monthly_data.{FILE_FORMAT}
-                MATCH_BY_COLUMN_NAME=CASE_INSENSITIVE;
-                """,
+            sql=read_sql_file('/opt/airflow/dags/sql/load_snowflake.sql'),
+            params={'service': service, 'file_format': FILE_FORMAT},
             snowflake_conn_id='snowflake'
         )
         delete_file = PythonOperator(
@@ -103,5 +105,5 @@ with DAG(
             },
             provide_context=True
         )
-        #download_file >> skip_loading
+        # download_file >> skip_loading
         download_file >> load_to_s3 >> delete_file >> copy_into_snowflake

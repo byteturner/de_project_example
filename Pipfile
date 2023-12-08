@@ -10,6 +10,8 @@ apache-airflow = "==2.7.3"
 apache-airflow-providers-amazon = "*"
 apache-airflow-providers-google = "==10.1.0"
 apache-airflow-providers-snowflake = "*"
+dbt-core = "*"
+dbt-snowflake = "*"
 
 [dev-packages]
 
