@@ -21,7 +21,7 @@ def read_sql_file(file_path):
 def download_data(execution_date, web_url, service_name, file_format, local_path):
     filedate = execution_date.strftime("_tripdata_%Y-%m.")
     webfilepath = f"{web_url}{service_name}{filedate}{file_format}"
-    localfilepath = f"{local_path}{service_name}{filedate}{file_format}"
+    localfilepath = f"{local_path}{service_name}{execution_date.strftime('_tripdata_%Y_%m.')}{file_format}"
 
     response = requests.get(webfilepath)
     if response.status_code == 200:
@@ -36,7 +36,7 @@ def download_data(execution_date, web_url, service_name, file_format, local_path
 
 
 def delete_data(execution_date, local_path, service_name, file_format):
-    filedate = execution_date.strftime("_tripdata_%Y-%m.")
+    filedate = execution_date.strftime("_tripdata_%Y_%m.")
     localfilepath = f"{local_path}{service_name}{filedate}{file_format}"
     try:
         os.remove(f"{localfilepath}")
@@ -79,10 +79,10 @@ with DAG(
         load_to_s3 = LocalFilesystemToS3Operator(
             task_id=f"{service}_taxi_data_to_s3",
             filename=f"{LOCAL_PATH}{service}_tripdata_"
-                     f"{{{{ macros.ds_format(ds, '%Y-%m-%d', '%Y-%m') }}}}.{FILE_FORMAT}",
+                     f"{{{{ macros.ds_format(ds, '%Y-%m-%d', '%Y_%m') }}}}.{FILE_FORMAT}",
             dest_bucket=BUCKET_NAME,
-            dest_key=f"ny_taxi/{service}/{{{{ macros.ds_format(ds, '%Y-%m-%d', '%Y-%m') }}}}/"
-                     f"{service}_{{{{ macros.ds_format(ds, '%Y-%m-%d', '%Y-%m') }}}}"
+            dest_key=f"ny_taxi/{service}/{{{{ macros.ds_format(ds, '%Y-%m-%d', '%Y_%m') }}}}/"
+                     f"{service}_{{{{ macros.ds_format(ds, '%Y-%m-%d', '%Y_%m') }}}}"
                      f"_monthly_data.{FILE_FORMAT}",
             replace=True,
             aws_conn_id="aws",
@@ -92,7 +92,10 @@ with DAG(
         copy_into_snowflake = SnowflakeOperator(
             task_id=f'copy_{service}_parquet_to_snowflake',
             sql=read_sql_file('/opt/airflow/dags/sql/load_snowflake.sql'),
-            params={'service': service, 'file_format': FILE_FORMAT},
+            params={
+                'service': service,
+                'file_format': FILE_FORMAT
+            },
             snowflake_conn_id='snowflake'
         )
         delete_file = PythonOperator(
