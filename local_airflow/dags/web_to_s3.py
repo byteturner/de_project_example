@@ -15,7 +15,8 @@ from constants import (
     LOCAL_PATH
 )
 
-def read_sql_file(file_path):
+def read_sql_file(service):
+    file_path = f"/opt/airflow/dags/sql/{service}_parquet_load.sql"
     with open(file_path, 'r') as file:
         return file.read()
 def download_data(execution_date, web_url, service_name, file_format, local_path):
@@ -91,7 +92,7 @@ with DAG(
 
         copy_into_snowflake = SnowflakeOperator(
             task_id=f'copy_{service}_parquet_to_snowflake',
-            sql=read_sql_file('/opt/airflow/dags/sql/load_snowflake.sql'),
+            sql=read_sql_file(service),
             params={
                 'service': service,
                 'file_format': FILE_FORMAT
