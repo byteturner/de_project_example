@@ -75,7 +75,7 @@ with DAG(
             },
             provide_context=True
         )
-        skip_loading = DummyOperator(task_id=f'skip_loading_{service}')
+        #skip_loading = DummyOperator(task_id=f'skip_loading_{service}')
 
         load_to_s3 = LocalFilesystemToS3Operator(
             task_id=f"{service}_taxi_data_to_s3",

@@ -1,4 +1,4 @@
-COPY INTO taxi_db.raw_data.fhv
+COPY INTO taxi_db.raw_data.{{ params.service }}
 FROM (
     SELECT
         $1:dispatching_base_num::varchar
