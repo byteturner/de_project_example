@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: green_raw
+    database: taxi_db
+    schema: raw_data
+    tables:
+      - name: green
