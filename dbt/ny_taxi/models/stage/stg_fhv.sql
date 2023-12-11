@@ -1,7 +1,7 @@
 {{ config(materialized='view') }}
 
 {%- set yaml_metadata -%}
-source_model: 'fhv_raw'
+source_model: 'fhv_raw':'fhv'
 ldts: 'load_dttm'
 rsrc: 'source_file'
 hashed_columns:
