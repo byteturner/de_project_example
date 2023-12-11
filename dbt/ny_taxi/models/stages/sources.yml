@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: RAW_DATA
+    database: TAXI_DB
+    schema: RAW_DATA
+    tables:
+      - name: FHV
+      - name: YELLOW
+      - name: GREEN
