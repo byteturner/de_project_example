@@ -2,19 +2,17 @@
 
 {%- set yaml_metadata -%}
 source_model:
-    location_raw: 'location'
+    rate_code_raw: 'rate_code'
 include_source_columns: true
 ldts: 'load_dttm'
-rsrc: '!location_raw_data'
+rsrc: '!rate_code_raw_data'
 hashed_columns:
-    hk_location_id_h:
-        - location_id
-    hd_location_id_s:
+    hk_rate_code_id_h:
+        - rate_code_id
+    hd_rate_code_id_s:
         is_hashdiff: true
         columns:
-            - borough
-            - zone
-            - service_zone
+            - rate_code_name
 {%- endset -%}
 
 {%- set metadata_dict = fromyaml(yaml_metadata) -%}

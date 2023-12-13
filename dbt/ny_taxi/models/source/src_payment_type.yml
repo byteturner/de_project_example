@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: payment_type_raw
+    database: taxi_db
+    schema: raw_data
+    tables:
+      - name: payment_type

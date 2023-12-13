@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: rate_code_raw
+    database: taxi_db
+    schema: raw_data
+    tables:
+      - name: rate_code

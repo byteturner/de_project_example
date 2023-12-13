@@ -2,19 +2,17 @@
 
 {%- set yaml_metadata -%}
 source_model:
-    location_raw: 'location'
+    payment_type_raw: 'payment_type'
 include_source_columns: true
 ldts: 'load_dttm'
-rsrc: '!location_raw_data'
+rsrc: '!payment_type_raw_data'
 hashed_columns:
-    hk_location_id_h:
-        - location_id
-    hd_location_id_s:
+    hk_payment_type_id_h:
+        - payment_type_id
+    hd_payment_type_id_s:
         is_hashdiff: true
         columns:
-            - borough
-            - zone
-            - service_zone
+            - payment_type_name
 {%- endset -%}
 
 {%- set metadata_dict = fromyaml(yaml_metadata) -%}

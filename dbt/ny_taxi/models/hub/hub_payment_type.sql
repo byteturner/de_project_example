@@ -1,10 +1,10 @@
 {{ config(materialized='incremental') }}
 
 {%- set yaml_metadata -%}
-hashkey: 'hk_location_id_h'
+hashkey: 'hk_payment_type_id_h'
 business_keys:
-    - location_id
-source_models: stg_location
+    - payment_type_id
+source_models: stg_payment_type
 {%- endset -%}
 
 {%- set metadata_dict = fromyaml(yaml_metadata) -%}
