@@ -12,10 +12,15 @@ hashed_columns:
     hk_provider_h:
         - dispatching_base_num
         - service_type
+    hk_location_id_h:
+        - pulocationid
+        - service_type
     hk_pickup_location_id_h:
         - pulocationid
+        - service_type
     hk_dropoff_location_id_h:
         - dolocationid
+        - service_type
 derived_columns:
     service_type:
         value: '!fhv'
@@ -28,6 +33,10 @@ derived_columns:
         value: 'TO_TIMESTAMP_NTZ(dropoff_datetime)'
         datatype: 'TIMESTAMP_NTZ'
         src_cols_required: dropoff_datetime
+    location_id:
+        value: 'pulocationid'
+        datatype: 'NUMBER'
+        src_cols_required: pulocationid
     source_pickup_location_id:
         value: 'pulocationid'
         datatype: 'NUMBER'

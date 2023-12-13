@@ -18,8 +18,10 @@ hashed_columns:
         - dolocationid
     hk_rate_code_id_h:
         - ratecodeid
+        - service_type
     hk_payment_type_id_h:
         - ratecodeid
+        - service_type
 derived_columns:
     service_type:
         value: '!yellow'
@@ -32,6 +34,14 @@ derived_columns:
         value: 'TO_TIMESTAMP_NTZ(tpep_dropoff_datetime)'
         datatype: 'TIMESTAMP_NTZ'
         src_cols_required: tpep_dropoff_datetime
+    source_pickup_location_id:
+        value: 'pulocationid'
+        datatype: 'NUMBER'
+        src_cols_required: pulocationid
+    source_dropoff_location_id:
+        value: 'dolocationid'
+        datatype: 'NUMBER'
+        src_cols_required: dolocationid
     source_rate_code_id:
         value: 'ratecodeid'
         datatype: 'NUMBER'

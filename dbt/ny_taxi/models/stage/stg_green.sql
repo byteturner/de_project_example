@@ -14,12 +14,16 @@ hashed_columns:
         - service_type
     hk_pickup_location_id_h:
         - pulocationid
+        - service_type
     hk_dropoff_location_id_h:
         - dolocationid
+        - service_type
     hk_rate_code_id_h:
         - ratecodeid
+        - service_type
     hk_payment_type_id_h:
         - ratecodeid
+        - service_type
 derived_columns:
     service_type:
         value: '!green'
@@ -32,6 +36,14 @@ derived_columns:
         value: 'TO_TIMESTAMP_NTZ(lpep_dropoff_datetime)'
         datatype: 'TIMESTAMP_NTZ'
         src_cols_required: lpep_dropoff_datetime
+    source_pickup_location_id:
+        value: 'pulocationid'
+        datatype: 'NUMBER'
+        src_cols_required: pulocationid
+    source_dropoff_location_id:
+        value: 'dolocationid'
+        datatype: 'NUMBER'
+        src_cols_required: dolocationid
     source_rate_code_id:
         value: 'ratecodeid'
         datatype: 'NUMBER'
@@ -85,9 +97,9 @@ derived_columns:
         datatype: 'FLOAT4'
         src_cols_required: congestion_surcharge
     source_trip_type:
-        value: 'source_trip_type'
+        value: 'trip_type'
         datatype: 'FLOAT4'
-        src_cols_required: source_trip_type
+        src_cols_required: trip_type
 {%- endset -%}
 
 {%- set metadata_dict = fromyaml(yaml_metadata) -%}
