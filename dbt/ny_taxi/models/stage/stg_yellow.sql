@@ -35,11 +35,11 @@ derived_columns:
         datatype: 'TIMESTAMP_NTZ'
         src_cols_required: tpep_dropoff_datetime
     source_pickup_location_id:
-        value: 'pulocationid'
+        value: 'COALESCE(pulocationid, -1)'
         datatype: 'NUMBER'
         src_cols_required: pulocationid
     source_dropoff_location_id:
-        value: 'dolocationid'
+        value: 'COALESCE(dolocationid, -1)'
         datatype: 'NUMBER'
         src_cols_required: dolocationid
     source_rate_code_id:

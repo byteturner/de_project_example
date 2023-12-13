@@ -6,8 +6,8 @@ business_keys:
     - location_id
     - service_type
 source_models:
-    - name: stg_fhv
-      rsrc_static: '!fhv_taxi_raw_data'
+    - name: stg_location
+      rsrc_static: '!location_raw_data'
     - name: stg_fhv
       hk_column: hk_pickup_location_id_h
       bk_columns:
@@ -27,13 +27,13 @@ source_models:
         - service_type
       rsrc_static: '!green_taxi_raw_data'
     - name: stg_green
-      hk_column: source_pickup_location_id
+      hk_column: hk_pickup_location_id_h
       bk_columns:
         - source_pickup_location_id
         - service_type
       rsrc_static: '!green_taxi_raw_data'
     - name: stg_yellow
-      hk_column: source_pickup_location_id
+      hk_column: hk_pickup_location_id_h
       bk_columns:
         - source_pickup_location_id
         - service_type
