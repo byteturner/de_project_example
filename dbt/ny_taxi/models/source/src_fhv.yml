@@ -6,3 +6,21 @@ sources:
     schema: raw_data
     tables:
       - name: fhv
+        description: >
+          This data dictionary describes FHV trip data. Each row represents a single trip in an FHV.
+        columns:
+          - name: dispatching_base_num
+            description: The TLC Base License Number of the base that dispatched the trip
+          - name: pickup_datetime
+            description: The date and time of the trip pick-up
+          - name: dropoff_datetime
+            description: The date and time of the trip dropoff
+          - name: pulocationid
+            description: TLC Taxi Zone in which the trip began
+          - name: dolocationid
+            description: TLC Taxi Zone in which the trip ended
+          - name: sr_flag
+            description: >
+              Indicates if the trip was a part of a shared ride chain offered by a High Volume FHV company 
+              (e.g. Uber Pool, Lyft Line). For shared trips, the value is 1. For non-shared rides, this field 
+              is null.

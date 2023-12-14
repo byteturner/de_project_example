@@ -11,19 +11,25 @@ hashed_columns:
         - service_type
     hk_provider_h:
         - vendorid
-        - service_type
     hk_pickup_location_id_h:
         - pulocationid
-        - service_type
     hk_dropoff_location_id_h:
         - dolocationid
-        - service_type
     hk_rate_code_id_h:
         - ratecodeid
-        - service_type
     hk_payment_type_id_h:
-        - ratecodeid
+        - payment_type
+    hd_service_type_s:
+        is_hashdiff: true
+        columns:
+            - service_type
+    hk_trip_r:
         - service_type
+        - vendorid
+        - pulocationid
+        - dolocationid
+        - source_file
+        - file_row_number
 derived_columns:
     service_type:
         value: '!green'
