@@ -21,8 +21,7 @@ hashed_columns:
         is_hashdiff: true
         columns:
             - service_type
-    hk_trip_r:
-        - service_type
+    hk_trip_h:
         - dispatching_base_num
         - pulocationid
         - dolocationid
@@ -64,6 +63,14 @@ derived_columns:
         value: 'sr_flag'
         datatype: 'STRING'
         src_cols_required: sr_flag
+    source_dl_file:
+        value: 'source_file'
+        datatype: 'STRING'
+        src_cols_required: source_file
+    source_file_row_number:
+        value: 'file_row_number'
+        datatype: 'NUMBER'
+        src_cols_required: file_row_number
 {%- endset -%}
 
 {%- set metadata_dict = fromyaml(yaml_metadata) -%}

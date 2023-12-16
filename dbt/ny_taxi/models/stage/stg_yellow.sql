@@ -19,17 +19,27 @@ hashed_columns:
         - ratecodeid
     hk_payment_type_id_h:
         - payment_type
-    hd_service_type_s:
-        is_hashdiff: true
-        columns:
-            - service_type
-    hk_trip_r:
+    hk_trip_h:
         - service_type
         - vendorid
         - pulocationid
         - dolocationid
         - source_file
         - file_row_number
+    hd_trip_s:
+        is_hashdiff: true
+        columns:
+            - passenger_count
+            - trip_distance
+            - store_and_fwd_flag
+            - fare_amount
+            - extra
+            - mta_tax
+            - tip_amount
+            - tolls_amount
+            - total_amount
+            - congestion_surcharge
+            - airport_fee
 derived_columns:
     service_type:
         value: '!yellow'
@@ -42,6 +52,10 @@ derived_columns:
         value: 'TO_TIMESTAMP_NTZ(tpep_dropoff_datetime)'
         datatype: 'TIMESTAMP_NTZ'
         src_cols_required: tpep_dropoff_datetime
+    source_provider_id:
+        value: 'vendorid'
+        datatype: 'NUMBER'
+        src_cols_required: vendorid
     source_pickup_location_id:
         value: 'COALESCE(pulocationid, -1)'
         datatype: 'NUMBER'
@@ -106,6 +120,14 @@ derived_columns:
         value: 'airport_fee'
         datatype: 'FLOAT4'
         src_cols_required: airport_fee
+    source_dl_file:
+        value: 'source_file'
+        datatype: 'STRING'
+        src_cols_required: source_file
+    source_file_row_number:
+        value: 'file_row_number'
+        datatype: 'NUMBER'
+        src_cols_required: file_row_number
 {%- endset -%}
 
 {%- set metadata_dict = fromyaml(yaml_metadata) -%}
