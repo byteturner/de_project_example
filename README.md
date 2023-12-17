@@ -52,8 +52,8 @@ After another DAG should be triggered to COPY file to Snoflake.<br/>
 ![dag](images/dag.png)
 
 **S3 bucket structure:**
-![bucket_structure](images/bucket_structure.png)
-![folder_structure](images/folder_structure.png)
+![bucket_structure](images/bucket_structure.png)<br/>
+![folder_structure](images/folder_structure.png)<br/>
 
 **Snowflake RAW_DATA structure:**
-![snowflake_structure](images/snowflake_structure.png)
+![snowflake_structure](images/snowflake_structure.png)<br/>
