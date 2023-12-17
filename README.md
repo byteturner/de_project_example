@@ -49,11 +49,25 @@ In production DAG should be separated to two parts: download file
 and upload it to s3.
 After another DAG should be triggered to COPY file to Snoflake.<br/>
 
-![dag](images/dag.png)
+![dag](images/dag.png)<br/>
 
-**S3 bucket structure:**
-<img width="500" alt="image" src="images/bucket_structure.png">
-<img width="500" alt="image" src="images/folder_structure.png">
+**S3 bucket structure:**<br/>
+<img width="500" alt="image" src="images/bucket_structure.png"><br/>
+<img width="500" alt="image" src="images/folder_structure.png"><br/>
 
 **Snowflake RAW_DATA structure:**<br/>
 <img width="500" alt="image" src="images/snowflake_structure.png"><br/>
+
+
+### Data modeling: ###
+
+Data Vault 2.0 was chosen for this project due to its flexibility, 
+scalability, and independence from the emergence of new entities.<br/>
+
+**DBT** was main data modeling tool together with **DATAVAILT4DBT** package which
+contains premade macros to help buid DV easily.<br/>
+
+**Stage layer structure:**<br/>
+<img width="500" alt="image" src="images/stage_layer.png"><br/>
+
+**Data Vault 2.0:**<br/>
