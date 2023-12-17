@@ -27,6 +27,20 @@ hashed_columns:
         - dolocationid
         - source_file
         - file_row_number
+    hk_trip_pickup_location_l:
+        - dispatching_base_num
+        - pulocationid
+        - dolocationid
+        - source_file
+        - file_row_number
+        - pulocationid
+    hk_trip_dropoff_location_l:
+        - dispatching_base_num
+        - pulocationid
+        - dolocationid
+        - source_file
+        - file_row_number
+        - dolocationid
 derived_columns:
     service_type:
         value: '!fhv'

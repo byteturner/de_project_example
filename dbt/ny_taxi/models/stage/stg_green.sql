@@ -40,6 +40,38 @@ hashed_columns:
             - total_amount
             - congestion_surcharge
             - trip_type
+    hk_trip_pickup_location_l:
+        - service_type
+        - vendorid
+        - pulocationid
+        - dolocationid
+        - source_file
+        - file_row_number
+        - pulocationid
+    hk_trip_dropoff_location_l:
+        - service_type
+        - vendorid
+        - pulocationid
+        - dolocationid
+        - source_file
+        - file_row_number
+        - dolocationid
+    hk_trip_rate_code_l:
+        - service_type
+        - vendorid
+        - pulocationid
+        - dolocationid
+        - source_file
+        - file_row_number
+        - ratecodeid
+    hk_trip_payment_type_l:
+        - service_type
+        - vendorid
+        - pulocationid
+        - dolocationid
+        - source_file
+        - file_row_number
+        - payment_type
 derived_columns:
     service_type:
         value: '!green'
