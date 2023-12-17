@@ -15,5 +15,6 @@ Taxi Lookup Table: https://d37ci6vzurychx.cloudfront.net/misc/taxi+_zone_lookup.
 
 ## Solution Architecture ##
 
-![app.png](..%2F..%2Ficons%2Fapp.png)
+![solution_architecture](images/app.png)
+
 
